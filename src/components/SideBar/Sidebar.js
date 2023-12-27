@@ -8,7 +8,7 @@ import DonutLargeIcon from '@mui/icons-material/DonutLarge';
 import ChatIcon from '@mui/icons-material/Chat';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchOutlined from '@mui/icons-material/SearchOutlined';
-import SidebarChat from "./SidebarChat";
+import SidebarChat from "./SidebarChat/SidebarChat.js";
 
 function Sidebar() {
 
