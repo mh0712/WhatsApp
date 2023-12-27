@@ -101,7 +101,6 @@ function Chat() {
               adjustInputHeight();
             }}
             placeholder="Type a message"
-            className="inputText"
           />
         </form>
         {input === "" ? (
