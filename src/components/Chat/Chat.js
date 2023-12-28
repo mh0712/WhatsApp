@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import "./Chat.css";
 import { Avatar } from "@mui/material";
 import { AttachFile, SavedSearchOutlined } from "@mui/icons-material";
@@ -7,11 +7,10 @@ import MicIcon from "@mui/icons-material/Mic";
 import SendIcon from "@mui/icons-material/Send";
 import IconButton from "@mui/material/IconButton";
 
-import data from "@emoji-mart/data";
-import Picker from "@emoji-mart/react";
+import EmojiPicker from 'emoji-picker-react';
 
 
-function Chat() {
+function Chat({ name, lastseen }) {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -59,8 +58,8 @@ function Chat() {
       <div className="chat_header">
         <Avatar />
         <div className="chat_headerInfo">
-          <h3>Room name</h3>
-          <p>Last seen at...</p>
+          <h3>{ name }</h3>
+          <p>Last seen at ...</p>
         </div>
 
         <div className="chat_headerRight">
@@ -114,12 +113,12 @@ function Chat() {
       </div>
 
       {showEmojiPicker && (
-        <div className="emoji-picker">
-          <Picker
-            data={data}
-            onEmojiSelect={(emoji) => handleEmojiClick(emoji)}
-            perLine={20}
-            skinTonePosition={"search"}
+        <div className="emoji_picker">
+          <EmojiPicker 
+          className = "picker_component"
+            width={'99.5%'}
+            onEmojiClick={(emoji) => handleEmojiClick(emoji)}
+            lazyLoadEmojis={true}
           />
         </div>
       )}
