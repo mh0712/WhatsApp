@@ -115,7 +115,6 @@ function Chat({ name, lastseen }) {
       {showEmojiPicker && (
         <div className="emoji_picker">
           <EmojiPicker 
-          className = "picker_component"
             width={'99.5%'}
             onEmojiClick={(emoji) => handleEmojiClick(emoji)}
             lazyLoadEmojis={true}
