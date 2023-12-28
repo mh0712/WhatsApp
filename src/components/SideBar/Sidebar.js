@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { onSnapshot, collection } from 'firebase/firestore';
-import { db } from './firebase';
+import { db } from '../../firebase';
 import "./Sidebar.css";
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
@@ -10,7 +10,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchOutlined from '@mui/icons-material/SearchOutlined';
 import SidebarChat from "./SidebarChat/SidebarChat.js";
 
-function Sidebar() {
+function Sidebar({ onSelectChat }) {
 
     const [rooms, setRooms] = useState([]);
 
@@ -51,7 +51,8 @@ function Sidebar() {
             <div className="sidebar_chats">
                 <SidebarChat addNewChat/>
                 {rooms.map(room => (
-                    <SidebarChat key={room.id} id={room.id} name={room.data.name} />
+                    <SidebarChat key={room.id} id={room.id} name={room.data.name} 
+                    onSelect={() => onSelectChat(room.data)}/>
                 ))}
             </div>
         </div>

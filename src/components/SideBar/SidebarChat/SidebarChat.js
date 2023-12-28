@@ -2,9 +2,9 @@ import React from "react";
 import './SidebarChat.css'
 import { Avatar } from "@mui/material";
 import { addDoc, collection } from 'firebase/firestore';
-import { db } from "./firebase";
+import { db } from "../../../firebase";
 
-function SidebarChat({ id, name, addNewChat }) {
+function SidebarChat({ id, name, addNewChat, onSelect }) {
 
   const createChat = async () => {
     const roomName = prompt("Please enter name for chat room");
@@ -23,7 +23,7 @@ function SidebarChat({ id, name, addNewChat }) {
   }
 
   return !addNewChat ? (
-    <div className="sidebarChat">
+    <div className="sidebarChat" onClick={onSelect}>
       <Avatar src=""/>
       <div className="sidebarChat_info">
         <h2>{name}</h2>
