@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import '../components/LoginForm/LoginPage.css';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword } from '@firebase/auth';
+import { createUserWithEmailAndPassword } from '@firebase/auth';
 import { auth } from '../firebase';
 
-function LoginPage() {
+function SignUpPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleSignUp = (e) => {
     e.preventDefault();
 
-    signInWithEmailAndPassword(auth, email, password)
+    createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
         console.log(userCredential);
         navigate('/ChattingPage');
@@ -22,15 +22,15 @@ function LoginPage() {
 
   };
 
-  const handleSignUp = () => {
-    navigate('/SignUpPage')
+  const handleBackPage = () => {
+    navigate('/LoginPage')
   }
 
   return (
-    <div className="LoginPage">
+    <div className="SignUp">
       <div className="login-container">
-        <h2>Login to WhatsApp</h2>
-        <form onSubmit={handleLogin}>
+        <h2>Sign Up to WhatsApp</h2>
+        <form onSubmit={handleSignUp}>
           <label htmlFor="email">Email:</label>
           <input
             type="text"
@@ -47,13 +47,12 @@ function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button type="submit">Login</button>
+          <button type="submit">SignUp</button>
         </form>
-        <button type="text" onClick={handleSignUp}>SignUp</button>
-
+          <button type="text" onClick={handleBackPage}>Back to Login</button>
       </div>
     </div>
   );
 }
 
-export default LoginPage;
+export default SignUpPage;

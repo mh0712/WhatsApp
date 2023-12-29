@@ -100,7 +100,6 @@ function Chat({ name, lastseen }) {
               adjustInputHeight();
             }}
             placeholder="Type a message"
-            className="inputText"
           />
         </form>
         {input === "" ? (
@@ -114,7 +113,7 @@ function Chat({ name, lastseen }) {
 
       {showEmojiPicker && (
         <div className="emoji_picker">
-          <EmojiPicker 
+          <EmojiPicker
             width={'99.5%'}
             onEmojiClick={(emoji) => handleEmojiClick(emoji)}
             lazyLoadEmojis={true}

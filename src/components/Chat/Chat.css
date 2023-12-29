@@ -29,7 +29,8 @@
   background-color: #ffff; /* Default background color for messages */
   padding: 10px;
   border-radius: 10px;
-  width: 300px;
+  width:fit-content;
+  max-width: 45%;
   position: relative;
   margin-bottom: 8px;
   word-wrap: break-word;
@@ -53,9 +54,11 @@
   border-style: solid;
   border-width: 10px 10px 10px 0;
   border-color: transparent #ece5dd transparent transparent;
-  right: 0;
-  top: 80%;
-  transform: translateY(-50%);
+  right: -20%;
+  top: 1%;
+  width:40px;
+  height:10px;
+  transform: rotate(90deg);
 }
 
 .chat_receiver:last-child::before {
@@ -82,7 +85,6 @@
     background-position: center;
     padding: 30px;
     overflow: auto;
-    overflow-y: auto;
 }
 
 .chat_footer {
@@ -90,7 +92,7 @@
     justify-content: space-between;
     flex-direction: row;
     align-items: center;
-    height: 62px;
+    height: 10%;
     border-top: 1px solid lightgray;
 }
 
@@ -105,11 +107,18 @@
     display: flex;
 }
 
-.chat_footer > form > input {
+.chat_footer > form > textarea {
     flex: 1;
     border-radius: 30px;
     padding: 10px;
+    padding-left: 20px;
     border: none;
+    resize: none;
+    overflow: hidden;
+    max-height: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px
+   
 }
 
 
@@ -121,6 +130,8 @@
     padding: 10px;
     color: grey;
 }
+
+
 
 .inputText {
  resize: none;
@@ -137,3 +148,4 @@
     height: fit-content;
     overflow: hidden;
 }
+

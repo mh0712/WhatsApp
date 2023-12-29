@@ -1,0 +1,54 @@
+.status{
+    display: flex;
+    flex-direction: column;
+    flex: 0.35;
+    border-right: 1px solid lightgray;
+}
+
+.statusbar_header{
+     display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    border-right: 1px solid lightgray;
+}
+
+.statusbar_headerRight{
+     display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-width: 20vw;
+}
+
+.statusbar_headerRight > .MuiSvgIcon-root {
+    margin-right: 2vw;
+    font-size: 24px !important;
+}
+
+.userStatus:hover {
+    background-color: #ebebeb;
+}
+.userStatus_info{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-around;
+    align-items: center;
+    border-bottom: 1px solid lightgray;
+    border-top: 1px solid lightgray;
+    background-color: white;
+    padding: 10px;
+
+}
+.userStatus_right{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+}
+.userStatus_info > .userStatus_text > h2 {
+    font-size: 18px;
+}
+
+.userStatus_info > .userStatus_text > p{
+     font-size: 14px;
+     text-align: center;
+}
