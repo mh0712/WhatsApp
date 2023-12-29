@@ -1,18 +1,25 @@
-import React, { useState } from 'react';
-import './assets/styles/App.css';
-import Sidebar from "./components/SideBar/Sidebar.js"
-import Chat from './components/Chat/Chat.js';
+import React from "react";
+import "./assets/styles/App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+
+
+import LoginPage from "./Pages/LoginPage";
+import SignUpPage from "./Pages/SignUpPage";
+import ChattingPage from "./Pages/ChattingPage";
+import StatusPage from "./Pages/StatusPage";
 
 function App() {
-  const [selectedChat, setSelectedChat] = useState(null);
-
   return (
     <div className="app">
-      <div className='app_body'>
-        <Sidebar  onSelectChat={(chat) => setSelectedChat(chat)}/>
-        {selectedChat && <Chat {...selectedChat}/>}
-        
-      </div>
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<LoginPage />}></Route>
+          <Route path="/LoginPage" element={<LoginPage />}></Route>
+          <Route path="/SignUpPage" element={<SignUpPage />}></Route>
+          <Route path="/ChattingPage" element={<ChattingPage />}></Route>
+          <Route path="/StatusPage" element={<StatusPage />}></Route>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
