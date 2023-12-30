@@ -7,12 +7,12 @@ import { db } from "../../../firebase";
 function SidebarChat({ id, name, addNewChat, onSelect }) {
 
   const createChat = async () => {
-    const roomName = prompt("Please enter name for chat room");
+    const userName = prompt("Please enter name for chat user");
 
-    if (roomName) {
+    if (userName) {
       try {
-        const docRef = await addDoc(collection(db, 'rooms'), {
-          name: roomName,
+        const docRef = await addDoc(collection(db, 'users'), {
+          name: userName,
         });
 
         console.log("document writtne with ID: ", docRef.id);

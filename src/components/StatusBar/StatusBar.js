@@ -8,8 +8,16 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import "./StatusBar.css"
 import { Avatar } from '@mui/material';
+import { useNavigate } from "react-router-dom";
+
 
 const StatusBar = () => {
+  const navigate = useNavigate();
+
+  const handleChatClick = () => {
+    navigate("/ChattingPage");
+  };
+
   return (
     <div className="status">
       <div className="statusbar_header">
@@ -18,7 +26,7 @@ const StatusBar = () => {
           <IconButton>
             <DonutLargeIcon />
           </IconButton>
-          <IconButton>
+          <IconButton onClick={handleChatClick}>
             <ChatIcon />
           </IconButton>
           <IconButton>
