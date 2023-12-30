@@ -9,14 +9,16 @@ import ChatIcon from '@mui/icons-material/Chat';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchOutlined from '@mui/icons-material/SearchOutlined';
 import SidebarChat from "./SidebarChat/SidebarChat.js";
+import { useNavigate } from "react-router-dom";
+
 
 function Sidebar({ onSelectChat }) {
-
-    const [rooms, setRooms] = useState([]);
+    const [users, setUsers] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const unsubscribe = onSnapshot(collection(db, 'rooms'), snapshot => {
-            setRooms(snapshot.docs.map(doc => ({
+        const unsubscribe = onSnapshot(collection(db, 'users'), snapshot => {
+            setUsers(snapshot.docs.map(doc => ({
               id: doc.id,
               data: doc.data()
             })));
@@ -25,12 +27,16 @@ function Sidebar({ onSelectChat }) {
           return () => unsubscribe();
     }, [])
 
+    const handleStatusClick = () => {
+        navigate("/StatusPage");
+    };
+
     return (
         <div className="sidebar">
             <div className="sidebar_header">
                 <Avatar />
                 <div className="sidebar_headerRight">
-                    <IconButton>
+                    <IconButton onClick={handleStatusClick}>
                         <DonutLargeIcon />
                     </IconButton>
                     <IconButton>
@@ -50,9 +56,9 @@ function Sidebar({ onSelectChat }) {
             </div>
             <div className="sidebar_chats">
                 <SidebarChat addNewChat/>
-                {rooms.map(room => (
-                    <SidebarChat key={room.id} id={room.id} name={room.data.name} 
-                    onSelect={() => onSelectChat(room.data)}/>
+                {users.map(user => (
+                    <SidebarChat key={user.id} id={user.id} name={user.data.name} 
+                    onSelect={() => onSelectChat(user.data)}/>
                 ))}
             </div>
         </div>

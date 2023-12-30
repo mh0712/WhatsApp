@@ -49,9 +49,16 @@ function Chat({ name, lastseen }) {
     return now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
-  const handleEmojiClick = (emoji) => {
-    setInput((prevInput) => prevInput + emoji.native);
+  const handleEmojiClick = (emojiObject) => {
+    setInput((prevInput) => prevInput + emojiObject.emoji);
   };
+  
+  const handleEnterKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault(); 
+      sendMessage(e); 
+    }
+  }
 
   return (
     <div className="chat">
@@ -93,12 +100,14 @@ function Chat({ name, lastseen }) {
         <InsertEmoticon onClick={() => setShowEmojiPicker(!showEmojiPicker)} />
         <form action="">
           <textarea
+            type="submit"
             ref={inputRef}
             value={input}
             onChange={(e) => {
               setInput(e.target.value);
               adjustInputHeight();
             }}
+            onKeyDown={handleEnterKeyPress}
             placeholder="Type a message"
           />
         </form>
@@ -115,7 +124,7 @@ function Chat({ name, lastseen }) {
         <div className="emoji_picker">
           <EmojiPicker
             width={'99.5%'}
-            onEmojiClick={(emoji) => handleEmojiClick(emoji)}
+            onEmojiClick={(emojiObject) => handleEmojiClick(emojiObject)}
             lazyLoadEmojis={true}
           />
         </div>
