@@ -8,6 +8,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import "./StatusBar.css"
 import { Avatar } from '@mui/material';
+import StatusList from './StatusList/StatusList';
 
 const StatusBar = () => {
   return (
@@ -44,6 +45,7 @@ const StatusBar = () => {
             </IconButton>
           </div>
         </div>
+        <StatusList/>
       </div>
     </div>
   );
