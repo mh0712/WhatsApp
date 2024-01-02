@@ -51,10 +51,11 @@
   content: "";
   position: absolute;
   border-style: solid;
-  border-width: 10px 10px 10px 0;
-  border-color: transparent #ece5dd transparent transparent;
-  right: -20%;
-  top: 1%;
+  border-width: 20px 10px 10px 0;
+  border-color: transparent #dcf8c6 transparent ;
+  right:-10px;
+  bottom: 0;
+  padding-bottom: 20px;
   width: 40px;
   height: 10px;
   transform: rotate(90deg);

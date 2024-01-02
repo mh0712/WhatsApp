@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { onSnapshot, collection } from 'firebase/firestore';
-import { db } from '../../firebase';
+import { onSnapshot, doc } from 'firebase/firestore';
+import { db, auth } from '../../firebase';
 import "./Sidebar.css";
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
@@ -10,22 +10,37 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchOutlined from '@mui/icons-material/SearchOutlined';
 import SidebarChat from "./SidebarChat/SidebarChat.js";
 import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
 
 
-function Sidebar({ onSelectChat }) {
-    const [users, setUsers] = useState([]);
+function Sidebar({ onSelectChat, onAddContactClick }) {
+    const [contacts, setContacts] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const unsubscribe = onSnapshot(collection(db, 'users'), snapshot => {
-            setUsers(snapshot.docs.map(doc => ({
-              id: doc.id,
-              data: doc.data()
-            })));
-          });
-
-          return () => unsubscribe();
-    }, [])
+        const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const currentUserUid = user.uid;
+                const docRef = doc(db, 'contacts', currentUserUid);
+    
+                const unsubscribeSnapshot = onSnapshot(docRef, (snapshot) => {
+                    const data = snapshot.exists() ? snapshot.data() : {};
+    
+                    const contactsArray = Object.entries(data).map(([uid, name]) => ({ uid, name }));
+                    console.log(contactsArray);
+                    setContacts(contactsArray);
+                });
+    
+                return () => {
+                    unsubscribeSnapshot();
+                };
+            }
+        });
+    
+        return () => {
+            unsubscribeAuth();
+        };
+    }, []);
 
     const handleStatusClick = () => {
         navigate("/StatusPage");
@@ -56,9 +71,14 @@ function Sidebar({ onSelectChat }) {
             </div>
             <div className="sidebar_chats">
                 <SidebarChat addNewChat/>
-                {users.map(user => (
-                    <SidebarChat key={user.id} id={user.id} name={user.data.name} 
-                    onSelect={() => onSelectChat(user.data)}/>
+                {contacts.map((contact) => (
+                    <SidebarChat
+                        key={contact.uid}
+                        id={contact.uid}
+                        name={contact.name}
+                        onSelect={() => onSelectChat({ id: contact.uid, name: contact.name })}
+                        onAddContactClick={onAddContactClick}
+                    />
                 ))}
             </div>
         </div>
