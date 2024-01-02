@@ -87,7 +87,7 @@ function Chat({ name, lastseen }) {
           <p
             key={message.id}
             className={`chat_message ${
-              message.sender === "user" && "chat_receiver"
+            message.sender === "user" && "chat_receiver"
             }`}
           >
             {message.message}
