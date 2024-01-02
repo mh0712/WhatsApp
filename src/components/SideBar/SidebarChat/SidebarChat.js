@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import './SidebarChat.css'
 import { Avatar } from "@mui/material";
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { db, auth } from "../../../firebase";
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 
@@ -22,8 +20,7 @@ function SidebarChat({ id, name, addNewChat, onSelect, onAddContactClick }) {
       </div>
     </div>
   ) : (
-    <div
-    className="sidebarChat">
+    <div className="sidebarChat">
       <h2>Add new Chat</h2>
     </div>
   );
