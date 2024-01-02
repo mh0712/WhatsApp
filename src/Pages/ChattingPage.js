@@ -6,6 +6,7 @@ import AddContactPopup from "../components/Contact/AddContactPopup";
 const ChattingPage = () => {
   const [selectedChat, setSelectedChat] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [otherUserId, setOtherUserId] = useState(null);
 
   const handleAddContactClick = () => {
     setIsPopupOpen(true);
@@ -15,16 +16,31 @@ const ChattingPage = () => {
     setIsPopupOpen(false);
   };
 
+  const handleSelectChat = (id, name) => {
+    setSelectedChat({ id, name });
+  };
+
   return (
     <div className="app">
       <div className="app_body">
         <Sidebar
-          onSelectChat={(chat) => setSelectedChat(chat)}
+          onSelectChat={handleSelectChat}
           onAddContactClick={handleAddContactClick}
         />
-        {selectedChat && <Chat {...selectedChat} />}
+        {selectedChat && (
+          <Chat
+            {...selectedChat}
+            selectedChat={selectedChat}
+            otherUserId={otherUserId}
+          />
+        )}
       </div>
-      {isPopupOpen && <AddContactPopup selectedChat={selectedChat} onClose={handlePopupClose} />}
+      {isPopupOpen && (
+        <AddContactPopup
+          selectedChat={selectedChat}
+          onClose={handlePopupClose}
+        />
+      )}
     </div>
   );
 };

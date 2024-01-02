@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { onSnapshot, doc } from 'firebase/firestore';
+import { onSnapshot, doc, collection } from 'firebase/firestore';
 import { db, auth } from '../../firebase';
 import "./Sidebar.css";
 import Avatar from '@mui/material/Avatar';
@@ -27,7 +27,6 @@ function Sidebar({ onSelectChat, onAddContactClick }) {
                     const data = snapshot.exists() ? snapshot.data() : {};
     
                     const contactsArray = Object.entries(data).map(([uid, name]) => ({ uid, name }));
-                    console.log(contactsArray);
                     setContacts(contactsArray);
                 });
     
@@ -75,7 +74,7 @@ function Sidebar({ onSelectChat, onAddContactClick }) {
                     <SidebarChat
                         key={contact.uid}
                         id={contact.uid}
-                        name={contact.name}
+                        name={contact.name || contact.uid}
                         onSelect={() => onSelectChat({ id: contact.uid, name: contact.name })}
                         onAddContactClick={onAddContactClick}
                     />
