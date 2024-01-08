@@ -123,11 +123,15 @@ function Chat({ lastseen, selectedChat }) {
         </div>
       </div>
 
-      <div className="chat_body">
-        {messages.map((message) => (
+          <div className="chat_body">
+        {messages.map((message, i) => (
           <p
             key={message.id}
-            className={`chat_message ${message.sender === auth.currentUser.uid ? "chat_sender" : "chat_receiver"}`}
+            className={`chat_message ${
+              message.sender === auth.currentUser.uid
+                ? "chat_sender"
+                : "chat_receiver"
+            } ${i < messages.length - 1 && messages[i + 1]?.sender === message.sender ? "noTail" : ""}`}
           >
             {message.content}
             <span className="chat_timestamp">{message.timestamp}</span>
