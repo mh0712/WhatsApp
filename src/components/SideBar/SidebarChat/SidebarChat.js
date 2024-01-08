@@ -1,26 +1,10 @@
 import React from "react";
 import './SidebarChat.css'
 import { Avatar } from "@mui/material";
-import { addDoc, collection } from 'firebase/firestore';
-import { db } from "../../../firebase";
+import AddIcon from '@mui/icons-material/Add';
+import IconButton from '@mui/material/IconButton';
 
-function SidebarChat({ id, name, addNewChat, onSelect }) {
-
-  const createChat = async () => {
-    const roomName = prompt("Please enter name for chat room");
-
-    if (roomName) {
-      try {
-        const docRef = await addDoc(collection(db, 'rooms'), {
-          name: roomName,
-        });
-
-        console.log("document writtne with ID: ", docRef.id);
-      } catch (e) {
-        console.log("Error adding document: ", e);
-      }
-    }
-  }
+function SidebarChat({ id, name, addNewChat, onSelect, onAddContactClick }) {
 
   return !addNewChat ? (
     <div className="sidebarChat" onClick={onSelect}>
@@ -29,10 +13,14 @@ function SidebarChat({ id, name, addNewChat, onSelect }) {
         <h2>{name}</h2>
         <p>Last message...</p>
       </div>
+      <div className="add_button">
+        <IconButton onClick={onAddContactClick}>
+          <AddIcon />
+        </IconButton>
+      </div>
     </div>
   ) : (
-    <div onClick={createChat} 
-    className="sidebarChat">
+    <div className="sidebarChat">
       <h2>Add new Chat</h2>
     </div>
   );

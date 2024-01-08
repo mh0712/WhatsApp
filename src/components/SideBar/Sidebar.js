@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { onSnapshot, collection } from 'firebase/firestore';
-import { db } from '../../firebase';
+import { onSnapshot, doc, collection } from 'firebase/firestore';
+import { db, auth } from '../../firebase';
 import "./Sidebar.css";
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
@@ -9,28 +9,48 @@ import ChatIcon from '@mui/icons-material/Chat';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchOutlined from '@mui/icons-material/SearchOutlined';
 import SidebarChat from "./SidebarChat/SidebarChat.js";
+import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
 
-function Sidebar({ onSelectChat }) {
 
-    const [rooms, setRooms] = useState([]);
+function Sidebar({ onSelectChat, onAddContactClick }) {
+    const [contacts, setContacts] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const unsubscribe = onSnapshot(collection(db, 'rooms'), snapshot => {
-            setRooms(snapshot.docs.map(doc => ({
-              id: doc.id,
-              data: doc.data()
-            })));
-          });
+        const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const currentUserUid = user.uid;
+                const docRef = doc(db, 'contacts', currentUserUid);
+    
+                const unsubscribeSnapshot = onSnapshot(docRef, (snapshot) => {
+                    const data = snapshot.exists() ? snapshot.data() : {};
+    
+                    const contactsArray = Object.entries(data).map(([uid, name]) => ({ uid, name }));
+                    setContacts(contactsArray);
+                });
+    
+                return () => {
+                    unsubscribeSnapshot();
+                };
+            }
+        });
+    
+        return () => {
+            unsubscribeAuth();
+        };
+    }, []);
 
-          return () => unsubscribe();
-    }, [])
+    const handleStatusClick = () => {
+        navigate("/StatusPage");
+    };
 
     return (
         <div className="sidebar">
             <div className="sidebar_header">
                 <Avatar />
                 <div className="sidebar_headerRight">
-                    <IconButton>
+                    <IconButton onClick={handleStatusClick}>
                         <DonutLargeIcon />
                     </IconButton>
                     <IconButton>
@@ -50,9 +70,14 @@ function Sidebar({ onSelectChat }) {
             </div>
             <div className="sidebar_chats">
                 <SidebarChat addNewChat/>
-                {rooms.map(room => (
-                    <SidebarChat key={room.id} id={room.id} name={room.data.name} 
-                    onSelect={() => onSelectChat(room.data)}/>
+                {contacts.map((contact) => (
+                    <SidebarChat
+                        key={contact.uid}
+                        id={contact.uid}
+                        name={contact.name || contact.uid}
+                        onSelect={() => onSelectChat({ id: contact.uid, name: contact.name })}
+                        onAddContactClick={onAddContactClick}
+                    />
                 ))}
             </div>
         </div>

@@ -1,8 +1,9 @@
 .sidebarChat {
-    display: flex;
+    position: relative;
     padding: 20px;
-    cursor: pointer;
+    display: flex;
     border-bottom: 2px solid #f6f6f6;
+    cursor: pointer;
 }
 
 .sidebarChat:hover {
@@ -15,4 +16,11 @@
 
 .sidebarChat_info {
     margin-left: 15px;
+}
+
+.add_button {
+    position: absolute;
+    padding: 5px;
+    top: 0;
+    right: 2%;
 }
