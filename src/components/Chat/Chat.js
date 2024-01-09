@@ -32,6 +32,21 @@ function Chat({ lastseen, selectedChat }) {
       }
     });
 
+    const checkAndCreateChat = async () => {
+      const chatDoc = await getDoc(chatDocRef);
+      if (!chatDoc.exists()) {
+        // Create a new chat document
+        await setDoc(chatDocRef, {
+          participants: [currentUserUid, id.id],
+          allMessages: [],
+        });
+
+        console.log("Chat document created successfully!");
+      }
+    };
+
+    checkAndCreateChat();
+
     return () => {
       unsubscribe();
     };
