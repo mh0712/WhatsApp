@@ -1,4 +1,5 @@
 import React from "react";
+import "./ChatHeader.css";
 import Avatar from "@mui/material/Avatar";
 import { SavedSearchOutlined, AttachFile, MoreVert } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";

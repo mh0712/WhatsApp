@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import "./Chat.css";
-import { auth, db } from "../../firebase";
-import { doc, updateDoc } from "firebase/firestore";
+import { auth } from "../../firebase";
 import ChatHeader from "./ChatParts/ChatHeader";
 import ChatBody from "./ChatParts/ChatBody";
 import ChatFooter from "./ChatParts/ChatFooter";

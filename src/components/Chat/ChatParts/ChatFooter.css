@@ -1,0 +1,45 @@
+.chat_footer {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  height: 10%;
+  border-top: 1px solid lightgray;
+}
+
+.chat_footer > form {
+  flex: 1;
+  display: flex;
+}
+
+.chat_footer > form > textarea {
+  flex: 1;
+  border-radius: 30px;
+  padding: 10px;
+  padding-left: 20px;
+  border: none;
+  resize: none;
+  overflow: hidden;
+  max-height: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+}
+
+.chat_footer > form > button {
+  display: none;
+}
+
+.chat_footer > .MuiSvgIcon-root {
+  padding: 10px;
+  color: grey;
+}
+
+.emoji_picker {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border-top: 1px solid lightgray;
+}

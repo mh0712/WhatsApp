@@ -1,4 +1,5 @@
 import React from "react";
+import "./ChatBody.css";
 
 function ChatBody({ messages, currentUserUid }) {
   return (

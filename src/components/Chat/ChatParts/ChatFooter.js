@@ -1,5 +1,6 @@
 // ChatFooter.js
 import React from "react";
+import "./ChatFooter.css";
 import { InsertEmoticon, Mic } from "@mui/icons-material";
 import SendIcon from "@mui/icons-material/Send";
 import IconButton from "@mui/material/IconButton";
@@ -44,7 +45,7 @@ function ChatFooter({
         <div className="emoji_picker">
           <EmojiPicker
             width={'99.5%'}
-            onEmojiClick={(emojiObject) => handleEmojiClick(emojiObject)}
+            onEmojiClick={handleEmojiClick}
             lazyLoadEmojis={true}
           />
         </div>
