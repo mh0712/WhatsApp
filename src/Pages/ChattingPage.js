@@ -16,8 +16,8 @@ const ChattingPage = () => {
     setIsPopupOpen(false);
   };
 
-  const handleSelectChat = (id, name) => {
-    setSelectedChat({ id, name });
+  const handleSelectChat = (user) => {
+    setSelectedChat(user);
   };
 
   return (

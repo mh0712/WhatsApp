@@ -15,37 +15,46 @@ import { onAuthStateChanged } from "firebase/auth";
 import GroupCreationPopup from "../Group/GroupCreationPopup.js"
 
 function Sidebar({ onSelectChat, onAddContactClick }) {
-  const [isGroupCreationOpen, setGroupCreationOpen] = useState(false);
+    const [contacts, setContacts] = useState([]);
+    const [groups, setGroups] = useState([]);
+    const [isGroupCreationOpen,setGroupCreationOpen]=useState(false)
+    const navigate = useNavigate();
 
-  const [contacts, setContacts] = useState([]);
-  const navigate = useNavigate();
+    useEffect(() => {
+        const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const currentUserUid = user.uid;
 
-  useEffect(() => {
-    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const currentUserUid = user.uid;
-        const docRef = doc(db, "contacts", currentUserUid);
+                // Fetch contacts collection
+                const docRef = doc(db, 'contacts', currentUserUid);
+    
+                const unsubscribeContacts = onSnapshot(docRef, (snapshot) => {
+                    const data = snapshot.exists() ? snapshot.data() : {};
+                    const contactsArray = Object.entries(data).map(([uid, name]) => ({ uid, name }));
+                    setContacts(contactsArray);
+                });
 
-        const unsubscribeSnapshot = onSnapshot(docRef, (snapshot) => {
-          const data = snapshot.exists() ? snapshot.data() : {};
-
-          const contactsArray = Object.entries(data).map(([uid, name]) => ({
-            uid,
-            name,
-          }));
-          setContacts(contactsArray);
+                // Fecth groups collection
+                const groupsCollectionRef = collection(db, 'groups');
+                const unsubscribeGroups = onSnapshot(groupsCollectionRef, (groupsSnapshot) => {
+                    const groupsArray = groupsSnapshot.docs.map((groupDoc) => {
+                        const { name } = groupDoc.data();
+                        return { id: groupDoc.id, name};
+                    })
+                    setGroups(groupsArray);
+                });
+    
+                return () => {
+                    unsubscribeContacts();
+                    unsubscribeGroups();
+                };
+            }
         });
-
+    
         return () => {
-          unsubscribeSnapshot();
+            unsubscribeAuth();
         };
-      }
-    });
-
-    return () => {
-      unsubscribeAuth();
-    };
-  }, []);
+    }, []);
 
   const handleStatusClick = () => {
     navigate("/StatusPage");
@@ -86,19 +95,14 @@ function Sidebar({ onSelectChat, onAddContactClick }) {
           <SearchOutlined />
           <input placeholder="Search or start new chat" type="text" />
         </div>
-        <IconButton onClick={handleOpenGroupCreation}>
-          <Groups2Icon />
-        </IconButton>
+
+        <GroupCreationPopup
+          open={isGroupCreationOpen}
+          onClose={handleCloseGroupCreation}
+          onCreateGroup={handleCreateGroup}
+          memberList={contacts}
+        />
       </div>
-
-
-      <GroupCreationPopup
-        open={isGroupCreationOpen}
-        onClose={handleCloseGroupCreation}
-        onCreateGroup={handleCreateGroup}
-       memberList={contacts}
-      />
-
       <div className="sidebar_chats">
         <SidebarChat addNewChat />
         {contacts.map((contact) => (
@@ -110,6 +114,17 @@ function Sidebar({ onSelectChat, onAddContactClick }) {
               onSelectChat({ id: contact.uid, name: contact.name })
             }
             onAddContactClick={onAddContactClick}
+          />
+        ))}
+
+        {groups.map((group) => (
+          <SidebarChat
+            key={group.id}
+            id={group.id}
+            name={group.name}
+            onSelect={() =>
+              onSelectChat({ id: group.id, name: group.name, isGroup: true })
+            }
           />
         ))}
       </div>
