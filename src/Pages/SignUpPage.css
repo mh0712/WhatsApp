@@ -1,0 +1,74 @@
+.app_body1 {
+  display: flex;
+  background-color: #f8f8f8;
+  height: 80vh;
+  width: 80vw;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-container {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.login-container > h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.login-container > form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-container > form > button {
+  background-color: #128c7e;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+ .login-container > form > button:hover {
+  background-color:#92E3A9;
+}
+
+
+button[type="text"] {
+  background-color: transparent;
+  color: #333;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button[type="text"]:hover {
+  text-decoration: underline;
+}
+
+.image_container {
+  min-width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image_container img {
+  min-width: 100%;
+  border-radius: 10px;
+}
+
+@media screen and (max-width:630px){
+    .image_container{
+        display: none;
+    }
+}

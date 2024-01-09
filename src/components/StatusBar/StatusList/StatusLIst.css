@@ -1,0 +1,56 @@
+.statusList {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  overflow-y: hidden;
+}
+
+.statusList_section {
+  flex: 1;
+  margin-top: 20px;
+  /* background-color: #fff; */
+  overflow: hidden;
+}
+
+.statusList_section > h2{
+    font-size: 16px;
+}
+
+.statusList_item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  background-color: white;
+    border-top: 1px solid #ccc;
+    border-bottom:1px solid #ccc; ;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+
+  .statusList_info {
+    margin-left: 10px;
+
+    h3 {
+      margin: 0;
+      font-size: 12px;
+      color: #333;
+    }
+
+    p {
+      margin: 0;
+      font-size: 14px;
+      color: #777;
+    }
+  }
+}
+
+.statusList_section > p {
+    background-color:white;
+    text-align: center;
+    padding: 10px;
+    font-style:italic;
+
+}
