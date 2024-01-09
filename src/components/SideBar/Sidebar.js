@@ -15,23 +15,36 @@ import { onAuthStateChanged } from "firebase/auth";
 
 function Sidebar({ onSelectChat, onAddContactClick }) {
     const [contacts, setContacts] = useState([]);
+    const [groups, setGroups] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
         const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
             if (user) {
                 const currentUserUid = user.uid;
+
+                // Fetch contacts collection
                 const docRef = doc(db, 'contacts', currentUserUid);
     
-                const unsubscribeSnapshot = onSnapshot(docRef, (snapshot) => {
+                const unsubscribeContacts = onSnapshot(docRef, (snapshot) => {
                     const data = snapshot.exists() ? snapshot.data() : {};
-    
                     const contactsArray = Object.entries(data).map(([uid, name]) => ({ uid, name }));
                     setContacts(contactsArray);
                 });
+
+                // Fecth groups collection
+                const groupsCollectionRef = collection(db, 'groups');
+                const unsubscribeGroups = onSnapshot(groupsCollectionRef, (groupsSnapshot) => {
+                    const groupsArray = groupsSnapshot.docs.map((groupDoc) => {
+                        const { name } = groupDoc.data();
+                        return { id: groupDoc.id, name};
+                    })
+                    setGroups(groupsArray);
+                });
     
                 return () => {
-                    unsubscribeSnapshot();
+                    unsubscribeContacts();
+                    unsubscribeGroups();
                 };
             }
         });
@@ -77,6 +90,15 @@ function Sidebar({ onSelectChat, onAddContactClick }) {
                         name={contact.name || contact.uid}
                         onSelect={() => onSelectChat({ id: contact.uid, name: contact.name })}
                         onAddContactClick={onAddContactClick}
+                    />
+                ))}
+
+                {groups.map((group) => (
+                    <SidebarChat
+                        key={group.id}
+                        id={group.id}
+                        name={group.name}
+                        onSelect={() => onSelectChat({ id: group.id, name: group.name, isGroup: true})}
                     />
                 ))}
             </div>

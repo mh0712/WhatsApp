@@ -1,0 +1,33 @@
+    Marc:  FDLalVVQVAUzqgxOsXZA8BSNO3F3
+Celine08:  Pb1jyzdjiYgfmJmdneas0LteR5s1
+    Karl:  QuycfrlGTQYAYo4jz7SVyPLrFf43
+     Ali:  CcaQ6tg2FVg8l6YeBKBCRIIcfNG3
+     Jad:  DXJpOUrjWtgK75HiMQW6eipuSQH2
+
+
+► Collection: groups
+	• Document: hlahsdlkfhasdlb (auto-generated groupID)
+		→ Fields:
+			- name: Group Name 
+			- createdAt: "Nov 16, 2020" 
+			- createdBy: "lhkfsjfdlgakahdsf" (eg of userId)
+			- photoURL: "https://firebasestorage..."
+			- admins: ["hsdfgsdfsa", "fasfhgsdfs",...]
+			- members: ["hdgfwerw", "jadfhvdzas", "uefdsdfvc", ...]
+		
+		► Subcollection: members
+			• Document: "ghsfdasdfgs" (memberID)
+				→ Fields:
+					- name: "Celine"
+					- photoURL: "https://firebasestorage..."
+		► Subcollection: messages
+			• Document: "hsafadsfawea" (auto-generated)
+				→ Fields:
+					- content: "Hello all! Welcome to our first group"
+					- sender: "fgslkdhfalksd" (senderID)
+					- timestamp: "10:18"
+
+
+
+
+
