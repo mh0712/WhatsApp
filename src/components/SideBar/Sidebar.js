@@ -1,87 +1,120 @@
 import React, { useState, useEffect } from "react";
-import { onSnapshot, doc, collection } from 'firebase/firestore';
-import { db, auth } from '../../firebase';
+import { onSnapshot, doc, collection } from "firebase/firestore";
+import { db, auth } from "../../firebase";
 import "./Sidebar.css";
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import DonutLargeIcon from '@mui/icons-material/DonutLarge';
-import ChatIcon from '@mui/icons-material/Chat';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import SearchOutlined from '@mui/icons-material/SearchOutlined';
+import Avatar from "@mui/material/Avatar";
+import IconButton from "@mui/material/IconButton";
+import DonutLargeIcon from "@mui/icons-material/DonutLarge";
+import ChatIcon from "@mui/icons-material/Chat";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
+import Groups2Icon from "@mui/icons-material/Groups2";
 import SidebarChat from "./SidebarChat/SidebarChat.js";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
-
+import GroupCreationPopup from "../Group/GroupCreationPopup.js"
 
 function Sidebar({ onSelectChat, onAddContactClick }) {
-    const [contacts, setContacts] = useState([]);
-    const navigate = useNavigate();
+  const [isGroupCreationOpen, setGroupCreationOpen] = useState(false);
 
-    useEffect(() => {
-        const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                const currentUserUid = user.uid;
-                const docRef = doc(db, 'contacts', currentUserUid);
-    
-                const unsubscribeSnapshot = onSnapshot(docRef, (snapshot) => {
-                    const data = snapshot.exists() ? snapshot.data() : {};
-    
-                    const contactsArray = Object.entries(data).map(([uid, name]) => ({ uid, name }));
-                    setContacts(contactsArray);
-                });
-    
-                return () => {
-                    unsubscribeSnapshot();
-                };
-            }
+  const [contacts, setContacts] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const currentUserUid = user.uid;
+        const docRef = doc(db, "contacts", currentUserUid);
+
+        const unsubscribeSnapshot = onSnapshot(docRef, (snapshot) => {
+          const data = snapshot.exists() ? snapshot.data() : {};
+
+          const contactsArray = Object.entries(data).map(([uid, name]) => ({
+            uid,
+            name,
+          }));
+          setContacts(contactsArray);
         });
-    
+
         return () => {
-            unsubscribeAuth();
+          unsubscribeSnapshot();
         };
-    }, []);
+      }
+    });
 
-    const handleStatusClick = () => {
-        navigate("/StatusPage");
+    return () => {
+      unsubscribeAuth();
     };
+  }, []);
 
-    return (
-        <div className="sidebar">
-            <div className="sidebar_header">
-                <Avatar />
-                <div className="sidebar_headerRight">
-                    <IconButton onClick={handleStatusClick}>
-                        <DonutLargeIcon />
-                    </IconButton>
-                    <IconButton>
-                        <ChatIcon />
-                    </IconButton>
-                    <IconButton>
-                        <MoreVertIcon />
-                    </IconButton>
-                </div>
-            </div>
+  const handleStatusClick = () => {
+    navigate("/StatusPage");
+  };
 
-            <div className="sidebar_search">
-                <div className="sidebar_searchContainer">
-                    <SearchOutlined />
-                    <input placeholder="Search or start new chat" type="text" />
-                </div>
-            </div>
-            <div className="sidebar_chats">
-                <SidebarChat addNewChat/>
-                {contacts.map((contact) => (
-                    <SidebarChat
-                        key={contact.uid}
-                        id={contact.uid}
-                        name={contact.name || contact.uid}
-                        onSelect={() => onSelectChat({ id: contact.uid, name: contact.name })}
-                        onAddContactClick={onAddContactClick}
-                    />
-                ))}
-            </div>
+  const handleOpenGroupCreation = () => {
+    setGroupCreationOpen(true);
+  };
+
+  const handleCloseGroupCreation = () => {
+    setGroupCreationOpen(false);
+  };
+
+  const handleCreateGroup = (groupName, members) => {
+    // Implement logic to create a group in your main Chat component
+    // You may use a function similar to the createGroup function provided in the previous response
+  };
+
+  return (
+    <div className="sidebar">
+      <div className="sidebar_header">
+        <Avatar />
+        <div className="sidebar_headerRight">
+          <IconButton onClick={handleStatusClick}>
+            <DonutLargeIcon />
+          </IconButton>
+          <IconButton>
+            <ChatIcon />
+          </IconButton>
+          <IconButton>
+            <MoreVertIcon />
+          </IconButton>
         </div>
-    );
+      </div>
+
+      <div className="sidebar_search">
+        <div className="sidebar_searchContainer">
+          <SearchOutlined />
+          <input placeholder="Search or start new chat" type="text" />
+        </div>
+        <IconButton onClick={handleOpenGroupCreation}>
+          <Groups2Icon />
+        </IconButton>
+      </div>
+
+
+      <GroupCreationPopup
+        open={isGroupCreationOpen}
+        onClose={handleCloseGroupCreation}
+        onCreateGroup={handleCreateGroup}
+       memberList={contacts}
+      />
+
+      <div className="sidebar_chats">
+        <SidebarChat addNewChat />
+        {contacts.map((contact) => (
+          <SidebarChat
+            key={contact.uid}
+            id={contact.uid}
+            name={contact.name || contact.uid}
+            onSelect={() =>
+              onSelectChat({ id: contact.uid, name: contact.name })
+            }
+            onAddContactClick={onAddContactClick}
+          />
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default Sidebar;

@@ -1,7 +1,7 @@
 import React from "react";
 import './SidebarChat.css'
 import { Avatar } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
+import EditIcon from "@mui/icons-material/Edit";
 import IconButton from '@mui/material/IconButton';
 
 function SidebarChat({ id, name, addNewChat, onSelect, onAddContactClick }) {
@@ -15,7 +15,7 @@ function SidebarChat({ id, name, addNewChat, onSelect, onAddContactClick }) {
       </div>
       <div className="add_button">
         <IconButton onClick={onAddContactClick}>
-          <AddIcon />
+          <EditIcon />
         </IconButton>
       </div>
     </div>

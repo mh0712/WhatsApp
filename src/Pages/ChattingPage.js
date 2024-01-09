@@ -39,6 +39,7 @@ const ChattingPage = () => {
         <AddContactPopup
           selectedChat={selectedChat}
           onClose={handlePopupClose}
+          open={isPopupOpen}
         />
       )}
     </div>
