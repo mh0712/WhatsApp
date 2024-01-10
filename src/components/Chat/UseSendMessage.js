@@ -8,9 +8,7 @@ async function UseSendMessage(input, selectedChat, setInput) {
     const currentUserUid = auth.currentUser.uid;
 
     // Check if it's a group chat
-    console.log(selectedChat + "marc")
     if (selectedChat.isGroup) {
-      console.log('gay1')
       // If it's a group, add the message to the messages subcollection
       const groupMessagesCollection = collection(db, 'groups', selectedChat.id, 'messages');
       await addDoc(groupMessagesCollection, {
@@ -20,7 +18,6 @@ async function UseSendMessage(input, selectedChat, setInput) {
       });
     } 
     else {
-      console.log('gay2')
       // For one-on-one chats, update the allMessages array in the chats collection
       const chatId = [currentUserUid, selectedChat.id].sort().join("_");
       const chatDocRef = doc(db, 'chats', chatId);
