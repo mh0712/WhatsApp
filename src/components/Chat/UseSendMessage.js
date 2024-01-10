@@ -1,27 +1,41 @@
-import { arrayUnion, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, arrayUnion, collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 
 async function UseSendMessage(input, selectedChat, setInput) {
-
-  const getCurrentTimestamp = () => {
-    const now = new Date();
-    return now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  };
+  const timestamp = new Date().toLocaleString();
 
   try {
     const currentUserUid = auth.currentUser.uid;
-    const chatId = [currentUserUid, selectedChat.id].sort().join("_");
-    const chatDocRef = doc(db, "chats", chatId);
 
-    const newMessage = {
-      content: input,
-      sender: currentUserUid,
-      timestamp: getCurrentTimestamp(),
-    };
+    // Check if it's a group chat
+    console.log(selectedChat + "marc")
+    if (selectedChat.isGroup) {
+      console.log('gay1')
+      // If it's a group, add the message to the messages subcollection
+      const groupMessagesCollection = collection(db, 'groups', selectedChat.id, 'messages');
+      await addDoc(groupMessagesCollection, {
+        content: input,
+        sender: currentUserUid,
+        timestamp: timestamp,
+      });
+    } 
+    else {
+      console.log('gay2')
+      // For one-on-one chats, update the allMessages array in the chats collection
+      const chatId = [currentUserUid, selectedChat.id].sort().join("_");
+      const chatDocRef = doc(db, 'chats', chatId);
 
-    await updateDoc(chatDocRef, {
-      allMessages: arrayUnion(newMessage),
-    });
+      const newMessage = {
+        content: input,
+        sender: currentUserUid,
+        timestamp: timestamp,
+      };
+
+
+      await updateDoc(chatDocRef, {
+        allMessages: arrayUnion(newMessage),
+      });
+    }
 
     // Check if the other user is in the contacts
     const currentUserContactsRef = doc(db, "contacts", selectedChat.id);

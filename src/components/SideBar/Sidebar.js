@@ -32,12 +32,17 @@ function Sidebar({ onSelectChat, onAddContactClick }) {
                     setContacts(contactsArray);
                 });
 
-                // Fecth groups collection
+                // Fetch groups collection
                 const groupsCollectionRef = collection(db, 'groups');
                 const unsubscribeGroups = onSnapshot(groupsCollectionRef, (groupsSnapshot) => {
                     const groupsArray = groupsSnapshot.docs.map((groupDoc) => {
-                        const { name } = groupDoc.data();
-                        return { id: groupDoc.id, name};
+                        const { name, members } = groupDoc.data();
+                        
+                        // Only include groups where the current user is a member
+                        if (members && members.includes(currentUserUid)) {
+                            return { id: groupDoc.id, name };
+                        }
+                        return null;
                     })
                     setGroups(groupsArray);
                 });
@@ -94,7 +99,7 @@ function Sidebar({ onSelectChat, onAddContactClick }) {
                 ))}
 
                 {groups.map((group) => (
-                    <SidebarChat
+                    group && <SidebarChat
                         key={group.id}
                         id={group.id}
                         name={group.name}
