@@ -6,7 +6,6 @@ import AddContactPopup from "../components/Contact/AddContactPopup";
 const ChattingPage = () => {
   const [selectedChat, setSelectedChat] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [otherUserId, setOtherUserId] = useState(null);
 
   const handleAddContactClick = () => {
     setIsPopupOpen(true);
@@ -27,13 +26,7 @@ const ChattingPage = () => {
           onSelectChat={handleSelectChat}
           onAddContactClick={handleAddContactClick}
         />
-        {selectedChat && (
-          <Chat
-            {...selectedChat}
-            selectedChat={selectedChat}
-            otherUserId={otherUserId}
-          />
-        )}
+        {selectedChat && <Chat selectedChat={selectedChat} />}
       </div>
       {isPopupOpen && (
         <AddContactPopup
