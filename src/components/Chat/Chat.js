@@ -12,7 +12,7 @@ function Chat({ lastseen, selectedChat }) {
   const [messages, setMessages] = useState([]);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const inputRef = useRef(null);
-  const { id, name } = selectedChat || {};
+  const { name } = selectedChat || {};
 
   UseChatEffect(selectedChat, setMessages);
   const sendMessage = () => UseSendMessage(input, selectedChat, setInput);
@@ -41,7 +41,11 @@ function Chat({ lastseen, selectedChat }) {
   return (
     <div className="chat">
       <ChatHeader name={name} />
-      <ChatBody messages={messages} currentUserUid={auth.currentUser.uid} />
+      <ChatBody 
+      messages={messages} 
+      currentUserUid={auth.currentUser.uid}
+      selectedChat={selectedChat} 
+      />
       <ChatFooter
         showEmojiPicker={showEmojiPicker}
         handleEmojiClick={handleEmojiClick}

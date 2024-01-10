@@ -24,15 +24,21 @@ function AddContactPopup({open, onClose, selectedChat }) {
       if (currentUserUid) {
         const userContactsRef = doc(db, "contacts", currentUserUid);
         const userContactsDoc = await getDoc(userContactsRef);
+        console.log(selectedChat.id)
+        if (userContactsDoc.exists()) {
+          // Document exists, update contacts map with the new name
+          const currentContacts = userContactsDoc.data();
+          currentContacts[selectedChat.id] = contactName; // Update Celine's contact with the new name
 
-        const updatedContacts = {
-          ...userContactsDoc.data(),
-          [id]: contactName,
-        };
+          await setDoc(userContactsRef, currentContacts);
 
-        await setDoc(userContactsRef, updatedContacts);
-
-        console.log("Contact updated successfully!");
+          console.log("Contact updated successfully!");
+        } else {
+          console.log('User contacts document does not exist');
+          await setDoc(userContactsRef, {
+            [selectedChat]: contactName,  // Use sender's UID as the name
+          });
+        }
       }
     } catch (error) {
       console.error("Error updating contact:", error);

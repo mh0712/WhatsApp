@@ -40,30 +40,32 @@ function Sidebar({ onSelectChat, onAddContactClick }) {
           setContacts(contactsArray);
         });
 
-        // Fecth groups collection
-        const groupsCollectionRef = collection(db, "groups");
-        const unsubscribeGroups = onSnapshot(
-          groupsCollectionRef,
-          (groupsSnapshot) => {
-            const groupsArray = groupsSnapshot.docs.map((groupDoc) => {
-              const { name } = groupDoc.data();
-              return { id: groupDoc.id, name };
-            });
-            setGroups(groupsArray);
-          }
-        );
-
+                // Fetch groups collection
+                const groupsCollectionRef = collection(db, 'groups');
+                const unsubscribeGroups = onSnapshot(groupsCollectionRef, (groupsSnapshot) => {
+                    const groupsArray = groupsSnapshot.docs.map((groupDoc) => {
+                        const { name, members } = groupDoc.data();
+                        
+                        // Only include groups where the current user is a member
+                        if (members && members.includes(currentUserUid)) {
+                            return { id: groupDoc.id, name };
+                        }
+                        return null;
+                    })
+                    setGroups(groupsArray);
+                });
+    
+                return () => {
+                    unsubscribeContacts();
+                    unsubscribeGroups();
+                };
+            }
+        });
+    
         return () => {
-          unsubscribeContacts();
-          unsubscribeGroups();
+            unsubscribeAuth();
         };
-      }
-    });
-
-    return () => {
-      unsubscribeAuth();
-    };
-  }, []);
+    }, []);
 
   const handleStatusClick = () => {
     navigate("/StatusPage");
@@ -121,7 +123,12 @@ function Sidebar({ onSelectChat, onAddContactClick }) {
                 <SearchOutlined />
               </IconButton>
             ),
-            style: { borderRadius: "50px",width:"100%",height:"36px",backgroundColor:"white"},
+            style: {
+              borderRadius: "50px",
+              width: "100%",
+              height: "36px",
+              backgroundColor: "white",
+            },
           }}
           color="success"
         />
@@ -150,16 +157,23 @@ function Sidebar({ onSelectChat, onAddContactClick }) {
           />
         ))}
 
-        {filteredGroups.map((group) => (
-          <SidebarChat
-            key={group.id}
-            id={group.id}
-            name={group.name}
-            onSelect={() =>
-              onSelectChat({ id: group.id, name: group.name, isGroup: true })
-            }
-          />
-        ))}
+        {filteredGroups.map(
+          (group) =>
+            group && (
+              <SidebarChat
+                key={group.id}
+                id={group.id}
+                name={group.name}
+                onSelect={() =>
+                  onSelectChat({
+                    id: group.id,
+                    name: group.name,
+                    isGroup: true,
+                  })
+                }
+              />
+            )
+        )}
       </div>
     </div>
   );
