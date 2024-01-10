@@ -32,7 +32,7 @@ function Chat({ lastseen, selectedChat }) {
   };
 
   const handleEnterKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }

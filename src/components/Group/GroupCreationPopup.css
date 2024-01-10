@@ -1,0 +1,70 @@
+/* .Dialog_container {
+  padding: 16px;
+} */
+
+.Dialog_title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px !important;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.groupname_TextField {
+  width: 100%;
+  margin-top: 12px !important;
+}
+
+.Autocomplete {
+  width: 250px !important;
+
+  margin-top: 16px !important;
+}
+
+.selectmembers_TextField {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.CheckboxList_item {
+  list-style-type: none;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.Checkbox {
+  color: #128c7e !important; /* Customize checkbox color */
+  border-radius: 50% !important;
+  margin-right: 8px !important; /* Adjust the spacing between the checkbox and avatar */
+}
+
+.Avatar {
+  margin-right: 8px !important; /* Adjust the spacing between the avatar and text */
+}
+
+.cancel_button {
+  color: #757575 !important; /* Customize cancel button color */
+}
+
+.cancel_button:hover {
+  background-color: #e7f8f6 !important; /* Customize cancel button color */
+}
+
+.Button {
+ color:  #128c7e !important; /* Customize create group button background color */
+}
+
+.Button:hover {
+  background-color: #e7f8f6!important; /* Customize create group button hover background color */
+}
+
+/* Apply a subtle zoom-in effect on hover */
+.CheckboxList_item {
+  transition: transform 0.2s ease, opacity 0.2s ease; /* Add smooth transitions */
+}
+
+.CheckboxList_item:hover {
+  background-color: #f5f5f5; /* Adjust the background color on hover */
+}
+
+

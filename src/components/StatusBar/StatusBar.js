@@ -10,6 +10,7 @@ import "./StatusBar.css"
 import { Avatar } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 
+import StatusList from "./StatusList/StatusList"
 
 const StatusBar = () => {
   const navigate = useNavigate();
@@ -52,6 +53,7 @@ const StatusBar = () => {
             </IconButton>
           </div>
         </div>
+        <StatusList/>
       </div>
     </div>
   );
