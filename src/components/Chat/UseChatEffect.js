@@ -1,10 +1,37 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { auth, db } from "../../firebase";
-import { doc, getDoc, onSnapshot, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, onSnapshot, orderBy, query, setDoc } from "firebase/firestore";
 
-function UseChatEffect(selectedChat, setMessages) {
-    useEffect(() => {
-        const currentUserUid = auth.currentUser.uid;
+function UseChatEffect(selectedChat) {
+  const [messages, setMessages] = useState([]);
+  const [members, setMembers] = useState({});
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      const currentUserUid = auth.currentUser.uid;
+
+      if (selectedChat.isGroup) {
+        const groupMessagesCollection = collection(db, "groups", selectedChat.id, "messages");
+        const q = query(groupMessagesCollection, orderBy("timestamp"));
+
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+          const messagesData = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+          setMessages(messagesData);
+        });
+
+        // Fetch members' names
+        const membersDoc = doc(db, "groups", selectedChat.id);
+        const membersSnapshot = await getDoc(membersDoc);
+        
+        if (membersSnapshot.exists()) {
+          setMembers(membersSnapshot.data());
+        }
+
+        return () => {
+          unsubscribe();
+        };
+      } 
+      else {
         const chatId = [currentUserUid, selectedChat.id].sort().join('_');
         const chatDocRef = doc(db, 'chats', chatId);
     
@@ -25,8 +52,6 @@ function UseChatEffect(selectedChat, setMessages) {
               participants: [currentUserUid, selectedChat.id],
               allMessages: [],
             });
-    
-            console.log("Chat document created successfully!");
           }
         };
     
@@ -35,7 +60,13 @@ function UseChatEffect(selectedChat, setMessages) {
         return () => {
           unsubscribe();
         };
-      }, [selectedChat, setMessages]);
+      }
+    }
+
+    fetchMessages();
+  }, [selectedChat]);
+
+  return { messages, members };
 }
 
 export default UseChatEffect;
