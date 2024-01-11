@@ -1,29 +1,74 @@
-.add_contact_popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #fff;
-  padding: 20px;
-  border: 1px solid #ccc;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+/* AddContactPopup.css */
+.ant-modal-content{
+  width: 80%;
+}
+.EditContact_container {
+  font-family: 'Arial', sans-serif;
+  border-radius: 0;
 }
 
-.popup_content {
-  text-align: center;
-}
-
-.popup_content > label {
-    margin: 15px;
-    display: flex;
-    align-items: center;
-}
-
-.popup_content > label > input {
-    margin: 5px;
-}
-
-.popup_buttons {
+.EditContact_content {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
 }
+
+.EditContact_title {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.editcontact_Input {
+ border-radius: 0 !important;
+  border: none !important;
+  border-bottom: 3px solid #d9d9d9 !important;
+}
+
+.editcontact_Input:hover,.editcontact_Input:focus{
+   border-bottom-color: #128c7e !important; /* Change the color as needed */
+  box-shadow: none !important;
+}
+.EditContact_actions {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 20px 20px;
+}
+
+.cancel_button {
+padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+}
+
+.cancel_button:hover,.cancel_button:focus{
+  background-color: #d9d9d9;
+  border: none;
+  color: grey !important;
+}
+
+
+.Button {
+  display: flex;
+  align-items: center;
+  background-color: #128c7e;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.Button:hover,.Button:focus{
+   background-color:#92E3A9 !important;
+}
+
+.delete_Button {
+  color: #fff !important;
+  background-color: #f5222d;
+  border-color: #f5222d;
+}
+
+/* You can add more styles based on your design */

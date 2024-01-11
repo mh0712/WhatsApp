@@ -1,14 +1,10 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+import { Modal, Button, Input,ConfigProvider } from "antd";
 import { auth, db } from "../../firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
+import "./AddContactPopup.css";
 
-function AddContactPopup({open, onClose, selectedChat }) {
+const AddContactPopup = ({ open, onClose, selectedChat }) => {
   console.log("Rendering AddContactPopup");
   const [contactName, setContactName] = useState("");
   const { id } = selectedChat || {};
@@ -24,19 +20,18 @@ function AddContactPopup({open, onClose, selectedChat }) {
       if (currentUserUid) {
         const userContactsRef = doc(db, "contacts", currentUserUid);
         const userContactsDoc = await getDoc(userContactsRef);
-        console.log(selectedChat.id)
+
         if (userContactsDoc.exists()) {
-          // Document exists, update contacts map with the new name
           const currentContacts = userContactsDoc.data();
-          currentContacts[selectedChat.id] = contactName; // Update Celine's contact with the new name
+          currentContacts[selectedChat.id] = contactName;
 
           await setDoc(userContactsRef, currentContacts);
 
           console.log("Contact updated successfully!");
         } else {
-          console.log('User contacts document does not exist');
+          console.log("User contacts document does not exist");
           await setDoc(userContactsRef, {
-            [selectedChat]: contactName,  // Use sender's UID as the name
+            [selectedChat]: contactName,
           });
         }
       }
@@ -51,42 +46,60 @@ function AddContactPopup({open, onClose, selectedChat }) {
     onClose();
   };
 
+   useEffect(() => {
+     // Set the initial contactName when the component mounts
+     setContactName(selectedChat.name || "");
+   }, [selectedChat]);
+
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      maxWidth="md"
-      className="Dialog_container"
+    <ConfigProvider
+      theme={{
+        token: {
+          borderRadiusLG: 0,
+        },
+        components: {
+          Input: {
+            hoverBorderColor: "#128c7e",
+            activeBorderColor: "#128c7e",
+          },
+          Modal: {
+            footerBg: "#F5F5F5",
+          }}}}>
+    <Modal
+      visible={open}
+      onCancel={onClose}
+      centered
+      destroyOnClose
+      footer={null}
+      className="EditContact_container"
     >
-      <DialogTitle className="Dialog_title">Edit Contact</DialogTitle>
-      <DialogContent>
-        <TextField
-          label="Name"
+      <div className="EditContact_content">
+        <h2 className="EditContact_title">Edit Contact</h2>
+        <Input
+          placeholder="Name"
           value={contactName}
           onChange={handleInputChange}
-          className="editcontact_TextField"
-          color="success"
-          variant="standard"
+          className="editcontact_Input"
         />
-      </DialogContent>
-      <DialogActions>
+      </div>
+      <div className="EditContact_actions">
         <Button
           onClick={handleCancelClick}
-          color="secondary"
+          type="danger"
           className="cancel_button"
         >
           Cancel
         </Button>
-        <Button onClick={handleSaveContact} color="primary" className="Button">
+        <Button onClick={handleSaveContact} type="primary" className="Button">
           Save Changes
         </Button>
-
-        <Button onClick={handleSaveContact} color="error" className="delete_Button">
+        <Button onClick={handleSaveContact} danger className="delete_Button">
           Delete Contact
         </Button>
-      </DialogActions>
-    </Dialog>
+      </div>
+    </Modal>
+    </ConfigProvider>
   );
-}
+};
 
 export default AddContactPopup;

@@ -1,58 +1,21 @@
 import React, { useState, useEffect } from "react";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import Checkbox from "@mui/material/Checkbox";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import { Modal, Input, Avatar, Button, Select, ConfigProvider } from "antd";
 import "./GroupCreationPopup.css";
-import { Avatar, IconButton } from "@mui/material";
 
-const icon = (
-  <div
-    style={{
-      borderRadius: "50%",
-      width: "12px", // Adjust the width of the circle
-      height: "12px", // Adjust the height of the circle
-      backgroundColor: "#fff", // Adjust the background color of the circle
-      border: "2px solid #f5f5f5", // Adjust the border style
-    }}
-  />
-);
-const checkedIcon = <div
-                    style={{
-                      borderRadius: "50%",
-                      width: "12px", // Adjust the width of the circle
-                      height: "12px", // Adjust the height of the circle
-                      backgroundColor: "#60c6ba", // Adjust the background color of the circle when checked
-                      border: "2px solid #e7f8f6 ", // Adjust the border style when checked
-                    }}
-                  />;
-function stringAvatar(name) {
-  if (name && name.split(" ")[0] && name.split(" ")[1]) {
-    return {
-      sx: 
-      {
-       bgcolor: "grey",
-        width: 16,
-        height: 16,
-      
-      },
-      children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
-    };
-  } else if (name && name.split(" ")[0]){
-    return {
-      sx: {
-        bgcolor: "grey",
-      },
-      children: `${name.split(" ")[0][0]}`,
-    };
-  }
-}
+const { Option } = Select;
+
+const filterMembers = (memberList, searchTerm) => {
+  const lowerCaseSearchTerm = searchTerm.toLowerCase();
+  return memberList.filter((member) => {
+    const lowerCaseName = member.name.toLowerCase();
+    const lowerCaseUid = member.uid.toLowerCase();
+    return (
+      lowerCaseName.includes(lowerCaseSearchTerm) ||
+      lowerCaseUid.includes(lowerCaseSearchTerm)
+    );
+  });
+};
+
 const GroupCreationPopup = ({ open, onClose, onCreateGroup, memberList }) => {
   const [groupName, setGroupName] = useState("");
   const [selectedMembers, setSelectedMembers] = useState([]);
@@ -61,12 +24,7 @@ const GroupCreationPopup = ({ open, onClose, onCreateGroup, memberList }) => {
 
   useEffect(() => {
     if (Array.isArray(memberList)) {
-      const filtered = memberList.filter(
-        (member) =>
-          member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          member.uid.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredMembers(filtered);
+      setFilteredMembers(filterMembers(memberList, searchTerm));
     } else {
       console.error("Member list is not an array:", memberList);
       setFilteredMembers([]);
@@ -81,77 +39,78 @@ const GroupCreationPopup = ({ open, onClose, onCreateGroup, memberList }) => {
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      maxWidth="md"
-      className="Dialog_container"
-      style={{borderRadius:"0"}}
+    <ConfigProvider
+      theme={{
+        token: {
+          borderRadiusLG: 0,
+        },
+        components: {
+          Input: {
+            hoverBorderColor: "#128c7e",
+            activeBorderColor: "#128c7e",
+          },
+          Modal: {
+            footerBg: "#F5F5F5",
+          },
+          Select: {
+            optionSelectedBg: "rgba(0, 0, 0, 0.1)",
+          },
+        },
+      }}
     >
-      <DialogTitle className="Dialog_title">Create Group</DialogTitle>
-      <DialogContent>
-        <TextField
-          label="Group name"
-          value={groupName}
-          onChange={(e) => setGroupName(e.target.value)}
-          className="groupname_TextField"
-          // margin="dense"
-          color="success"
-          required
-          variant="standard"
-        />
-
-        <Autocomplete
-          multiple
-          id="members-checkboxes"
-          options={filteredMembers}
-          disableCloseOnSelect
-          getOptionLabel={(option) => option.name}
-          renderOption={(props, option, { selected }) => (
-            <li {...props} className="CheckboxList_item">
-              <Checkbox
-                icon={icon}
-                checkedIcon={checkedIcon}
-                checked={selected}
-                className="Checkbox"
-              />
-              {option && option.name && (
-                <>
-                  <Avatar className="Avatar" {...stringAvatar(option.name)} />
-                  {"  "}
-                  {option.name}
-                  {"  "}
-                </>
-              )}
-            </li>
-          )}
-          className="Autocomplete"
-          onChange={(_, newValue) => setSelectedMembers(newValue)}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Select Members"
-              placeholder="Search"
-              className="selectmembers_TextField"
-              color="success"
-              variant="standard"
+      <Modal
+        visible={open}
+        onCancel={onClose}
+        centered
+        destroyOnClose
+        footer={null}
+      >
+        <div className="GroupCreationPopup">
+          <h2 className="GroupCreationPopup-title">Create a New Group</h2>
+          <div className="GroupCreationPopup-content">
+            <Input
+              placeholder="Enter Group Name"
+              value={groupName}
+              count={{
+                show: true,
+                max: 25,
+              }}
+              onChange={(e) => setGroupName(e.target.value)}
+              className={`GroupCreationPopup-textarea input-custom`}
+              required
             />
-          )}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="secondary" className="cancel_button">
-          Cancel
-        </Button>
-        <Button
-          onClick={handleCreateGroup}
-          color="secondary"
-          className="Button"
-        >
-          Create Group
-        </Button>
-      </DialogActions>
-    </Dialog>
+
+            <Select
+              mode="multiple"
+              className={`GroupCreationPopup-select select-custom`}
+              placeholder="Select Members"
+              optionLabelProp="label"
+              value={selectedMembers}
+              onChange={(value) => setSelectedMembers(value)}
+              showSearch
+              onSearch={(value) => setSearchTerm(value)}
+              filterOption={(input, option) =>
+                option.label.toLowerCase().includes(input.toLowerCase())
+              }
+              popupClassName="memberList_style"
+              maxTagCount={5}
+            >
+              {filteredMembers.map((option) => (
+                <Option key={option.uid} label={option.name} value={option.uid}>
+                  <Avatar size="small" src={option.avatarUrl} /> {option.name}
+                </Option>
+              ))}
+            </Select>
+          </div>
+          <div className="GroupCreationPopup-footer">
+            <Button onClick={onClose}>Cancel</Button>
+            <Button type="primary" onClick={handleCreateGroup}>
+              Create Group
+            </Button>
+          </div>
+        </div>
+      </Modal>
+    </ConfigProvider>
   );
 };
 
