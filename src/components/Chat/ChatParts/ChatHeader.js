@@ -8,8 +8,9 @@ import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Grow from "@mui/material/Grow";
 import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
+import InfoPage from "../../InfoPage/InfoPage";
 
-function ChatHeader({ name }) {
+function ChatHeader({ name, handleChatInfoClick }) {
   const [isAttachmentsOpen, setAttachmentsOpen] = useState(false);
   const anchorRef = useRef(null);
 
@@ -21,10 +22,13 @@ function ChatHeader({ name }) {
     setAttachmentsOpen(false);
   };
 
+
+
+
   return (
     <div className="chat_header">
       <Avatar />
-      <div className="chat_headerInfo">
+      <div className="chat_headerInfo" onClick={handleChatInfoClick}>
         <h3>{name}</h3>
         <p>Last seen at ...</p>
       </div>
@@ -48,7 +52,6 @@ function ChatHeader({ name }) {
           anchorEl={anchorRef.current}
           role={undefined}
           placement="bottom-start"
-        
           transition
           disablePortal
           className="attachement_Popper"
@@ -73,6 +76,7 @@ function ChatHeader({ name }) {
           <MoreVert />
         </IconButton>
       </div>
+     
     </div>
   );
 }
