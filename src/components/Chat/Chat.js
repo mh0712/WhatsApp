@@ -4,15 +4,16 @@ import { auth } from "../../firebase";
 import ChatHeader from "./ChatParts/ChatHeader";
 import ChatBody from "./ChatParts/ChatBody";
 import ChatFooter from "./ChatParts/ChatFooter";
+import InfoPage from "../InfoPage/InfoPage";
 import UseSendMessage from "./UseSendMessage";
 
-function Chat({ lastseen, selectedChat }) {
+function Chat({ lastseen, selectedChat, handleChatInfoClick }) {
   const [input, setInput] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
   const inputRef = useRef(null);
   const { name } = selectedChat || {};
 
-  
   const sendMessage = () => UseSendMessage(input, selectedChat, setInput);
 
   const handleEmojiClick = (emojiObject) => {
@@ -36,8 +37,12 @@ function Chat({ lastseen, selectedChat }) {
 
   return (
     <div className="chat">
-      <ChatHeader name={name} />
-      <ChatBody currentUserUid={auth.currentUser.uid} selectedChat={selectedChat} />
+      <ChatHeader name={name} handleChatInfoClick={handleChatInfoClick} />
+
+      <ChatBody
+        currentUserUid={auth.currentUser.uid}
+        selectedChat={selectedChat}
+      />
       <ChatFooter
         showEmojiPicker={showEmojiPicker}
         handleEmojiClick={handleEmojiClick}

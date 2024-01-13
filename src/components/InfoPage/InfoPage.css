@@ -1,0 +1,37 @@
+.layout{
+    position: absolute;
+    z-index: 999;
+    width: 60%;
+    padding: 10px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+}
+.avatar_container{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    margin-top: 10px;
+}
+.sider{
+    background-color: darkgray;
+}
+.content{
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding-left: 10px;
+    background-color: white;
+}
+
+.button_container{
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    padding: 10px;
+}
+
+.ant-typography{
+    margin-bottom: 0 !important;
+}
